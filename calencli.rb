@@ -103,53 +103,102 @@ events = [
     "calendar" => "web-dev" },
 ]
 
-title = puts "-----------------------------Welcome to CalenCLI------------------------------"
-puts title
-
 def print_options
   puts "-" * 78
-  puts "list | create | show | update | delete | next | prev | exit "
-  puts " "
+  puts "list | create | show | update | delete | next | prev | exit \n\n"
 end
+# events = [
+#   { "id" => (id = id.next),
+#     "start_date" => "2023-02-13T00:00:00-05:00",
+#     "title" => "Ruby Basics 1",
+#     "end_date" => "",
+#     "notes" => "Ruby Basics 1 notes",
+#     "guests" => ["Paulo", "Andre"],
+#     "calendar" => "web-dev" },
 
-print_options
+def calendar (events)
+  arr = []
+  puts "-----------------------------Welcome to CalenCLI------------------------------"
+  puts ""
+  date_formatted = nil
+  
+   events.each_index do |i|
+      # if arr.include?(date_formatted)
+      #   print "          "
+      #   print "  "
+      # else
+        date_string = events[i]["start_date"]
+        date = DateTime.parse(date_string)
+        date_formatted = date.strftime("%a %b %d")
+        print date_formatted
+        print "  "
+        arr.push(date_formatted)
+      # end
 
-actions = nil
-
-while actions != "exit"
-  print "action: "
-  actions = gets.chomp
-
-    case actions
-    when "list"
-      puts "enliste esto"
-      print_options
-    when "create"
-      puts "cree esto"
-      print_options
-    when "show"
-      puts "mostre esto"
-      print_options
-    when "update"
-      puts "actualize esto"
-      print_options
-    when "delete"
-      puts "borre esto"
-      print_options
-    when "next"
-      puts "siguiente pagina"
-      print_options
-    when "prev"
-      puts "pagina anterior"
-      print_options
-    when "exit"
-      puts "Thanks to use calenCli!"
-    else
-      puts "opcion NO valida"
+      if events[i]["end_date"] == ""
+        print "             "
+      else
+        time_s_string = events[i]["start_date"]
+        time_s = DateTime.parse(time_s_string)
+        time_s_formatted = time_s.strftime("%H:%M")
+        time_e_string = events[i]["end_date"]
+        time_e = DateTime.parse(time_e_string)
+        time_e_formatted = time_e.strftime("%H:%M")
+        print "#{time_s_formatted} - #{time_e_formatted}"
+      end
+      print " "
+      puts "#{events[i]["title"]} (#{events[i]["id"]})"
     end
+    print_options
+#   #  arrayx = array.sort |fecha| {segundo <=> primero}
 end
 
+calendar(events)
+# my_date = "2013-10-03 21:03:00Z"
+# puts date_obj = DateTime.strptime(my_date,'%Y-%m-%d %H:%M:%S%Z')
 
 
+# def calendar (events)
+  
+# end
 
+# title = puts "-----------------------------Welcome to CalenCLI------------------------------"
+# puts title
+
+# print_options
+
+# actions = nil
+
+# while actions != "exit"
+#   print "action: "
+#   actions = gets.chomp
+
+#     case actions
+#     when "list"
+#       puts "enliste esto"
+#       print_options
+#     when "create"
+#       puts "cree esto"
+#       print_options
+#     when "show"
+#       puts "mostre esto"
+#       print_options
+#     when "update"
+#       puts "actualize esto"
+#       print_options
+#     when "delete"
+#       puts "borre esto"
+#       print_options
+#     when "next"
+#       puts "siguiente pagina"
+#       print_options
+#     when "prev"
+#       puts "pagina anterior"
+#       print_options
+#     when "exit"
+#       puts "Thanks to use calenCli!"
+#     else
+#       puts "opcion NO valida"
+#     end
+# end
 
