@@ -103,48 +103,78 @@ events = [
     "calendar" => "web-dev" },
 ]
 
-title = puts "-----------------------------Welcome to CalenCLI------------------------------"
-puts title
-
 def print_options
   puts "-" * 78
-  puts "list | create | show | update | delete | next | prev | exit "
-  puts " "
+  puts "list | create | show | update | delete | next | prev | exit \n\n"
+
+end
+# events = [
+#   { "id" => (id = id.next),
+#     "start_date" => "2023-02-13T00:00:00-05:00",
+#     "title" => "Ruby Basics 1",
+#     "end_date" => "",
+#     "notes" => "Ruby Basics 1 notes",
+#     "guests" => ["Paulo", "Andre"],
+#     "calendar" => "web-dev" },
+def calendar (events)
+   events.each
+   date_string = events[0]["start_date"]
+   date = DateTime.parse(date_string)
+   date_formatted = date.strftime("%a %b %d")
+   p date_formatted
+#   #  if end_date == ""
+#   #  dale prioridad
+#   #  end
+#   #  arrayx = array.sort |fecha| {segundo <=> primero}
+ 
 end
 
-print_options
+calendar(events)
+# my_date = "2013-10-03 21:03:00Z"
+# puts date_obj = DateTime.strptime(my_date,'%Y-%m-%d %H:%M:%S%Z')
 
-actions = nil
 
-while actions != "exit"
-  print "action: "
-  actions = gets.chomp
+# def calendar (events)
+  
+# end
 
-    case actions
-    when "list"
-      puts "enliste esto"
-      print_options
-    when "create"
-      puts "cree esto"
-      print_options
-    when "show"
-      puts "mostre esto"
-      print_options
-    when "update"
-      puts "actualize esto"
-      print_options
-    when "delete"
-      puts "borre esto"
-      print_options
-    when "next"
-      puts "siguiente pagina"
-      print_options
-    when "prev"
-      puts "pagina anterior"
-      print_options
-    when "exit"
-      puts "Thanks to use calenCli!"
-    else
-      puts "opcion NO valida"
-    end
-end
+# title = puts "-----------------------------Welcome to CalenCLI------------------------------"
+# puts title
+
+# print_options
+
+# actions = nil
+
+# while actions != "exit"
+#   print "action: "
+#   actions = gets.chomp
+
+#     case actions
+#     when "list"
+#       puts "enliste esto"
+#       print_options
+#     when "create"
+#       puts "cree esto"
+#       print_options
+#     when "show"
+#       puts "mostre esto"
+#       print_options
+#     when "update"
+#       puts "actualize esto"
+#       print_options
+#     when "delete"
+#       puts "borre esto"
+#       print_options
+#     when "next"
+#       puts "siguiente pagina"
+#       print_options
+#     when "prev"
+#       puts "pagina anterior"
+#       print_options
+#     when "exit"
+#       puts "Thanks to use calenCli!"
+#     else
+#       puts "opcion NO valida"
+#     end
+# end
+
