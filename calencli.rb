@@ -148,3 +148,8 @@ while actions != "exit"
       puts "opcion NO valida"
     end
 end
+
+
+
+
+
