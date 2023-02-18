@@ -1,5 +1,6 @@
 require "date"
 require "time"
+require "time"
 
 # DATA
 id = 0
@@ -266,15 +267,6 @@ while actions != "exit"
     when "update"
       events = update(events)
       print_options
-
-      # {"id" => (id = id.next), 15
-      #   "start_date" => "2023-02-15T09:00:00-05:00",
-      #   "title" => "Extended Project",
-      #   "end_date" => "",
-      #   "notes" => "",
-      #   "guests" => [],
-      #   "calendar" => "web-dev" }
-
     when "delete"
       puts "borre esto"
       print_options
