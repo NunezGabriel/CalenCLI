@@ -1,6 +1,5 @@
 require "date"
 require "time"
-require "time"
 
 # DATA
 id = 0
@@ -163,66 +162,82 @@ events = [
         puts "list | create | show | update | delete | next | prev | exit \n\n"
       end
       
-    def update(events)
-          print "Event ID: "
-          e_id = gets.chomp.to_i
-          
-          for i in 0..(events.length-1)
-           if events[i]["id"] == e_id 
-                ind = i
-                break
-            end
+      def update(events)
+        print "Event ID: "
+        e_id = gets.chomp.to_i
+        
+        for i in 0..(events.length-1)
+          if events[i]["id"] == e_id 
+            ind = i
+            break
           end
-
-          print "updated date: "
-          date = gets.chomp
-          fecha = Date.parse(date)
-          fecha_format = DateTime.new(fecha.year, fecha.month, fecha.day, 0, 0, 0, "-05:00")
-          events[ind]["start_date"] = fecha_format.iso8601
+        end
         
-          print "updated title: "
-          n_title = gets.chomp
-          events[ind]["title"] = n_title
+        print "updated date: "
+        date = gets.chomp
+        fecha = Date.parse(date)
+        fecha_format = DateTime.new(fecha.year, fecha.month, fecha.day, 0, 0, 0, "-05:00")
+        events[ind]["start_date"] = fecha_format.iso8601
         
-          print "New start-end: "
-          n_start_end = gets.chomp
-          fecha_div = n_start_end.split("-")
+        print "updated title: "
+        n_title = gets.chomp
+        events[ind]["title"] = n_title
+        
+        print "New start-end: "
+        n_start_end = gets.chomp
+        fecha_div = n_start_end.split("-")
         
           fecha_st = fecha_div[0]
           fecha_end = fecha_div[1]
-        
+          
           time_s = Time.parse(fecha_st)
           datetime = DateTime.new(fecha.year, fecha.month, fecha.day, time_s.hour, time_s.min, 0, Rational(-5, 24))
           events[ind]["start_date"] = datetime.strftime("%Y-%m-%dT%H:%M:%S%:z")
-        
+          
           time_e = Time.parse(fecha_end)
           datetime_end = DateTime.new(fecha.year, fecha.month, fecha.day, time_e.hour, time_e.min, 0, Rational(-5, 24))
           events[ind]["end_date"] = datetime_end.strftime("%Y-%m-%dT%H:%M:%S%:z")
-        
+          
           print "updated notes: "
           u_notes = gets.chomp
           events[ind]["notes"] = u_notes
-        
+          
           print "updated guests: "
           u_guests = gets.chomp
           guests_arr = u_guests.split(", ")
           events[ind]["guests"]  = guests_arr
-
+          
           return events
-    end
-      
-      def calendar (current_w)
-        puts "-----------------------------Welcome to CalenCLI------------------------------"
-        puts ""
-        date_formatted = nil
-        current_w.each_index do |i|
-          start_date_s = DateTime.parse(current_w[i]["start_date"])
-          start_date_f = start_date_s.strftime("%a %b %d")
-          if start_date_f == (date_formatted)
-            print "            "
-          else
-            date = DateTime.parse(current_w[i]["start_date"])
-            date_formatted = date.strftime("%a %b %d")
+        end
+        
+        def delete(events)
+          print "Event ID: "
+          e_id = gets.chomp.to_i
+        
+          for i in 0..(events.length-1)
+            if events[i]["id"] == e_id
+              ind = i
+              break
+            end
+          end
+          
+          events.delete(events[ind])
+          puts "Event ID #{e_id} has been deleted"
+          return events
+        end
+
+        def calendar (current_w)
+          puts "-----------------------------Welcome to CalenCLI------------------------------"
+          puts ""
+          date_formatted = nil
+          current_w.each_index do |i|
+            start_date_s = DateTime.parse(current_w[i]["start_date"])
+            start_date_f = start_date_s.strftime("%a %b %d")
+            if start_date_f == (date_formatted)
+              print "            "
+            else
+              date = DateTime.parse(current_w[i]["start_date"])
+              date_formatted = date.strftime("%a %b %d")
             print date_formatted
             print "  "
           end
@@ -256,7 +271,7 @@ while actions != "exit"
 
     case actions
     when "list"
-      curent_w = w_sort(events)
+      current_w = w_sort(events)
       calendar(current_w)
     when "create"
       puts "cree esto"
@@ -268,7 +283,7 @@ while actions != "exit"
       events = update(events)
       print_options
     when "delete"
-      puts "borre esto"
+      events = delete(events)
       print_options
     when "next"
       puts "siguiente pagina"
@@ -282,3 +297,6 @@ while actions != "exit"
       puts "opcion NO valida"
     end
 end
+
+
+
