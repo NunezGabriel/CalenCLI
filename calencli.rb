@@ -113,17 +113,16 @@ def calendar (events)
   puts "-----------------------------Welcome to CalenCLI------------------------------"
   puts ""
   date_formatted = nil
-   events.each_index do |i|
-
-        start_date_string = events[i]["start_date"]  #
-        start_date_s = DateTime.parse(start_date_string)
+  next_day = nil
+  events.each_index do |i|
+        start_date_s = DateTime.parse(events[i]["start_date"])
         start_date_f = start_date_s.strftime("%a %b %d")
         if start_date_f == (date_formatted)
           print "          "
           print "  "
+          next_day = start_date_f
         else
-          date_string = events[i]["start_date"]
-          date = DateTime.parse(date_string)
+          date = DateTime.parse(events[i]["start_date"])
           date_formatted = date.strftime("%a %b %d")
           print date_formatted
           print "  "
@@ -133,30 +132,25 @@ def calendar (events)
       if events[i]["end_date"] == ""
         print "             "
       else
-        time_s_string = events[i]["start_date"]
-        time_s = DateTime.parse(time_s_string)
+        time_s = DateTime.parse(events[i]["start_date"])
         time_s_formatted = time_s.strftime("%H:%M")
 
-        time_e_string = events[i]["end_date"]
-        time_e = DateTime.parse(time_e_string)
+        time_e = DateTime.parse(events[i]["end_date"])
         time_e_formatted = time_e.strftime("%H:%M")
 
         print "#{time_s_formatted} - #{time_e_formatted}"
       end
       print " "
       puts "#{events[i]["title"]} (#{events[i]["id"]})"
-    end
-    print_options
-#   #  arrayx = array.sort |fecha| {segundo <=> primero}
+
+      if start_date_f == next_day
+        puts ""
+      end
+  end
+  print_options 
 end
 
 calendar(events)
-
-
-# title = puts "-----------------------------Welcome to CalenCLI------------------------------"
-# puts title
-
-# print_options
 
 # actions = nil
 
@@ -166,8 +160,7 @@ calendar(events)
 
 #     case actions
 #     when "list"
-#       puts "enliste esto"
-#       print_options
+#       calendar(events)
 #     when "create"
 #       puts "cree esto"
 #       print_options
