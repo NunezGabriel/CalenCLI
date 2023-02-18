@@ -1,5 +1,5 @@
 require "date"
-
+require "time"
 # DATA
 id = 0
 events = [
@@ -109,48 +109,97 @@ def print_options
   puts "list | create | show | update | delete | next | prev | exit \n\n"
 end
 
-def calendar (events)
-  puts "-----------------------------Welcome to CalenCLI------------------------------"
-  puts ""
-  date_formatted = nil
-  next_day = nil
-  events.each_index do |i|
-        start_date_s = DateTime.parse(events[i]["start_date"])
-        start_date_f = start_date_s.strftime("%a %b %d")
-        if start_date_f == (date_formatted)
-          print "          "
-          print "  "
-          next_day = start_date_f
-        else
-          date = DateTime.parse(events[i]["start_date"])
-          date_formatted = date.strftime("%a %b %d")
-          print date_formatted
-          print "  "
-        end
-          date_formatted = start_date_f
+# def calendar (events)
+#   puts "-----------------------------Welcome to CalenCLI------------------------------"
+#   puts ""
+#   date_formatted = nil
+#   next_day = nil
+#   events.each_index do |i|
+#         start_date_s = DateTime.parse(events[i]["start_date"])
+#         start_date_f = start_date_s.strftime("%a %b %d")
+#         if start_date_f == (date_formatted)
+#           print "          "
+#           print "  "
+#           next_day = start_date_f
+#         else
+#           date = DateTime.parse(events[i]["start_date"])
+#           date_formatted = date.strftime("%a %b %d")
+#           print date_formatted
+#           print "  "
+#         end
+#           date_formatted = start_date_f
 
-      if events[i]["end_date"] == ""
-        print "             "
-      else
-        time_s = DateTime.parse(events[i]["start_date"])
-        time_s_formatted = time_s.strftime("%H:%M")
+#       if events[i]["end_date"] == ""
+#         print "             "
+#       else
+#         time_s = DateTime.parse(events[i]["start_date"])
+#         time_s_formatted = time_s.strftime("%H:%M")
 
-        time_e = DateTime.parse(events[i]["end_date"])
-        time_e_formatted = time_e.strftime("%H:%M")
+#         time_e = DateTime.parse(events[i]["end_date"])
+#         time_e_formatted = time_e.strftime("%H:%M")
 
-        print "#{time_s_formatted} - #{time_e_formatted}"
-      end
-      print " "
-      puts "#{events[i]["title"]} (#{events[i]["id"]})"
+#         print "#{time_s_formatted} - #{time_e_formatted}"
+#       end
+#       print " "
+#       puts "#{events[i]["title"]} (#{events[i]["id"]})"
 
-      if start_date_f == next_day
-        puts ""
-      end
+#       if start_date_f == next_day
+#         puts ""
+#       end
+#   end
+#   print_options 
+# end
+
+# calendar(events)
+
+def update(events)
+  print "Event ID: "
+  e_id = gets.chomp.to_i
+  # ind = (e_id - 1)
+  
+  for i in 0..(events.length-1)
+    if events[i]["id"] == e_id
+        ind = i
+    end
   end
-  print_options 
+
+  print "updated date: "
+  date = gets.chomp
+  fecha = Date.parse(date)
+  fecha_format = DateTime.new(fecha.year, fecha.month, fecha.day, 0, 0, 0, "-05:00")
+  events[ind]["start_date"] = fecha_format.iso8601
+
+  print "updated title: "
+  n_title = gets.chomp
+  events[ind]["title"] = n_title
+
+  print "New start-end: "
+  n_start_end = gets.chomp
+  fecha_div = n_start_end.split("-")
+
+  fecha_st = fecha_div[0]
+  fecha_end = fecha_div[1]
+
+  time_s = Time.parse(fecha_st)
+  datetime = DateTime.new(fecha.year, fecha.month, fecha.day, time_s.hour, time_s.min, 0, Rational(-5, 24))
+  events[ind]["start_date"] = datetime.strftime("%Y-%m-%dT%H:%M:%S%:z")
+
+  time_e = Time.parse(fecha_end)
+  datetime_end = DateTime.new(fecha.year, fecha.month, fecha.day, time_e.hour, time_e.min, 0, Rational(-5, 24))
+  events[ind]["end_date"] = datetime_end.strftime("%Y-%m-%dT%H:%M:%S%:z")
+
+  print "updated notes: "
+  u_notes = gets.chomp
+  events[ind]["notes"] = u_notes
+
+  print "updated guests: "
+  u_guests = gets.chomp
+  guests_arr = u_guests.split(", ")
+  events[ind]["guests"]  = guests_arr
 end
 
-calendar(events)
+
+update(events)
 
 # actions = nil
 
