@@ -108,7 +108,7 @@ events = [
         "title" => "Extended Project",
         "end_date" => "",
         "notes" => "",
-        "guests" => [],
+        "guests" => ["Gabriel", "Gabriela", "Fernando"],
         "calendar" => "web-dev" }
       ]
       
@@ -161,7 +161,35 @@ events = [
         puts "-" * 78
         puts "list | create | show | update | delete | next | prev | exit \n\n"
       end
+     
+      def show(events)
+        print "Event ID: "
+        e_id = gets.chomp.to_i
       
+        for i in 0..(events.length-1)
+          if events[i]["id"] == e_id
+            ind = i
+            break
+          end
+        end
+        
+        puts "date: #{(DateTime.parse(events[ind]["start_date"])).to_date}"
+        puts "title: #{events[ind]["title"]}"
+        puts "calendar: #{events[ind]["calendar"]}"
+        if events[ind]["end_date"] != ""
+        date_s = DateTime.parse(events[ind]["start_date"])
+        date_s_f = date_s.strftime("%H:%M")
+        date_e = DateTime.parse(events[ind]["end_date"])
+        date_e_f = date_s.strftime("%H:%M")
+        puts "start_end: #{date_s_f} #{date_e_f}"
+        else
+          puts "start_end: "
+        end
+        puts "notes: #{events[ind]["notes"]}"
+        guests_s = events[ind]["guests"].join(", ")
+        print "guests: #{guests_s}\n"
+      end
+
       def update(events)
         print "Event ID: "
         e_id = gets.chomp.to_i
@@ -277,7 +305,7 @@ while actions != "exit"
       puts "cree esto"
       print_options
     when "show"
-      puts "mostre esto"
+      show (events)
       print_options
     when "update"
       events = update(events)
