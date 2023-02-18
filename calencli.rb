@@ -161,17 +161,99 @@ events = [
         puts "-" * 78
         puts "list | create | show | update | delete | next | prev | exit \n\n"
       end
-     
+
+      def create(events, id)        
+        new_event = Hash.new
+        new_event["id"] = id.next
+        print "Date: "
+        date = gets.chomp
+        while date.length != 10
+          puts "Type a valid date: YYYY-MM-DD"
+          print "Date: "
+          date = gets.chomp
+        end
+        fecha = Date.parse(date)
+        fecha_format = DateTime.new(fecha.year, fecha.month, fecha.day, 0, 0, 0, "-05:00")
+        start_date = fecha_format.iso8601
+        new_event["start_date"] = start_date
+        
+        print "Title: "
+        n_title = gets.chomp
+        while n_title == ""
+          puts "Title cannot be blank"
+          print "Title: "
+          n_title = gets.chomp
+        end
+        new_event["title"] = n_title
+        
+        print "Calendar: "
+        calendar = gets.chomp
+        
+        print "start_end: "
+        date = gets.chomp
+        while date.length != 11 && date != ""
+          puts "'HH:MM HH:MM' or leave it empty"
+          print "start_end: "
+          date = gets.chomp
+        end
+        if date != ""
+          fecha_div = date.split("-")
+          
+          fecha_st = fecha_div[0]
+          fecha_end = fecha_div[1]
+          
+          time_s = Time.parse(fecha_st)
+          datetime = DateTime.new(fecha.year, fecha.month, fecha.day, time_s.hour, time_s.min, 0, Rational(-5, 24))
+          new_event["start_date"] = datetime.strftime("%Y-%m-%dT%H:%M:%S%:z")
+          
+          time_e = Time.parse(fecha_end)
+          datetime_end = DateTime.new(fecha.year, fecha.month, fecha.day, time_e.hour, time_e.min, 0, Rational(-5, 24))
+          new_event["end_date"] = datetime_end.strftime("%Y-%m-%dT%H:%M:%S%:z")
+        else
+          new_event["end_date"] = ""
+        end
+        
+        print "notes: "
+        u_notes = gets.chomp
+        new_event["notes"] = u_notes
+        
+        print "guests: "
+        u_guests = gets.chomp
+        guests_arr = u_guests.split(", ")
+        new_event["guests"]  = guests_arr
+        new_event["calendar"] = calendar
+        
+
+        events.push(new_event)
+        return events
+      end
+      
       def show(events)
         print "Event ID: "
         e_id = gets.chomp.to_i
-      
+        
+        find = nil
+        while find.nil?
+          for i in 0..(events.length-1)
+            if events[i]["id"] == e_id
+              find = 1
+              break
+            end
+          end
+          if find.nil?
+            puts "ID no existe, ingrese ID valido"
+            print "ID: "
+            e_id = gets.chomp.to_i
+          end
+        end
+        
+        
         for i in 0..(events.length-1)
           if events[i]["id"] == e_id
             ind = i
             break
           end
-        end
+        end      
         
         puts "date: #{(DateTime.parse(events[ind]["start_date"])).to_date}"
         puts "title: #{events[ind]["title"]}"
@@ -322,7 +404,7 @@ while actions != "exit"
       current_w = w_sort(events)
       calendar(current_w)
     when "create"
-      puts "cree esto"
+      events = create(events,id)
       print_options
     when "show"
       show (events)
