@@ -201,18 +201,35 @@ events = [
           end
         end
         
-        print "updated date: "
+        print "Updated date: "
         date = gets.chomp
+        while date.length != 10
+          puts "Type a valid date: YYYY-MM-DD"
+          print "Date: "
+          date = gets.chomp
+        end
         fecha = Date.parse(date)
         fecha_format = DateTime.new(fecha.year, fecha.month, fecha.day, 0, 0, 0, "-05:00")
         events[ind]["start_date"] = fecha_format.iso8601
         
-        print "updated title: "
+        
+        print "Updated title: "
         n_title = gets.chomp
+        while n_title == ""
+          puts "Title cannot be blank"
+          print "Title: "
+          n_title = gets.chomp
+        end
         events[ind]["title"] = n_title
         
-        print "New start-end: "
+        print "Updated start-end: "
         n_start_end = gets.chomp
+        while n_start_end.length != 11 && n_start_end != ""
+          puts "'HH:MM HH:MM' or leave it empty"
+          print "start_end: "
+          n_start_end = gets.chomp
+        end
+        if n_start_end != ""
         fecha_div = n_start_end.split("-")
         
           fecha_st = fecha_div[0]
@@ -225,12 +242,15 @@ events = [
           time_e = Time.parse(fecha_end)
           datetime_end = DateTime.new(fecha.year, fecha.month, fecha.day, time_e.hour, time_e.min, 0, Rational(-5, 24))
           events[ind]["end_date"] = datetime_end.strftime("%Y-%m-%dT%H:%M:%S%:z")
+        else
+          events[ind]["end_date"] = ""
+        end
           
-          print "updated notes: "
+          print "Updated notes: "
           u_notes = gets.chomp
           events[ind]["notes"] = u_notes
           
-          print "updated guests: "
+          print "Updated guests: "
           u_guests = gets.chomp
           guests_arr = u_guests.split(", ")
           events[ind]["guests"]  = guests_arr
