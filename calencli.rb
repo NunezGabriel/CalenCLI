@@ -112,10 +112,15 @@ events = [
         "calendar" => "web-dev" }
       ]
       
-      def w_sort (events)
+    def w_sort (events)
       today = Date.today
       days_until_monday = today.wday == 0 ? 6 : today.wday - 1
       monday = today - days_until_monday
+
+      cwdays = []
+      for i in monday..monday+6
+        cwdays.push(i)
+      end
       
       current_w_s = []
       for i in 0..(events.length-1)
@@ -130,8 +135,12 @@ events = [
       end
       
       wdays = [[],[],[],[],[],[],[]]
+      date_validation = []
       for i in 0..(current_w_s.length-1)
         date_comp = (DateTime.parse(current_w_s[i]["start_date"])).to_date
+        if date_validation.include?(date_comp) == false
+          date_validation.push(date_comp)
+        end
         case date_comp
         when monday
           wdays[0].push(current_w_s[i])
@@ -149,6 +158,30 @@ events = [
           wdays[6].push(current_w_s[i])
         end
       end
+
+      flags = []
+      for i in 0..(cwdays.length-1)
+        if date_validation.include?(cwdays[i]) == true
+        flags.push(1)
+        else
+        flags.push(0)
+        end
+      end
+        
+      for i in 0..(flags.length-1)
+        phantom_date = cwdays[i].strftime("%Y-%m-%dT%H:%M:%S%:z")
+        hash = {"id" => "",
+          "start_date" => phantom_date, 
+          "title" => "No events",
+          "end_date" => "",
+          "notes" => "",
+          "guests" => [],
+          "calendar" => "" }
+        if flags[i] == 0
+          wdays[i].push(hash)
+        end
+      end
+
       current_w = []
       for i in 0..6
         wdays[i].sort_by! { |event| event["end_date"] }.each
@@ -360,8 +393,10 @@ events = [
           puts "-----------------------------Welcome to CalenCLI------------------------------"
           puts ""
           date_formatted = nil
-          comp_s = DateTime.parse("2023-02-13").to_date
-          comparacion = [comp_s]
+          today = Date.today
+          days_until_monday = today.wday == 0 ? 6 : today.wday - 1
+          monday = today - days_until_monday
+          comparacion = [monday]
           current_w.each_index do |i|
             start_date_s = DateTime.parse(current_w[i]["start_date"]).to_date
             comparacion.push(start_date_s)
@@ -391,16 +426,20 @@ events = [
             print "#{time_s_formatted} - #{time_e_formatted}"
           end
           print " "
-          puts "#{current_w[i]["title"]} (#{current_w[i]["id"]})"          
+          print "#{current_w[i]["title"]} " 
+            if current_w[i]["id"] == ""
+              puts "#{current_w[i]["id"]}"
+            else       
+              puts "(#{current_w[i]["id"]})"
+            end
           end
         print_options
       end
 
+
 current_w = w_sort(events)
 calendar(current_w)
-
 actions = nil
-
 while actions != "exit"
   print "action: "
   actions = gets.chomp
