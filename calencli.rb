@@ -355,38 +355,44 @@ events = [
           puts "Event ID #{e_id} has been deleted"
           return events
         end
-
+        
         def calendar (current_w)
           puts "-----------------------------Welcome to CalenCLI------------------------------"
           puts ""
           date_formatted = nil
+          comp_s = DateTime.parse("2023-02-13").to_date
+          comparacion = [comp_s]
           current_w.each_index do |i|
-            start_date_s = DateTime.parse(current_w[i]["start_date"])
+            start_date_s = DateTime.parse(current_w[i]["start_date"]).to_date
+            comparacion.push(start_date_s)
+            if comparacion[-2] < start_date_s
+            puts ""
+            end
             start_date_f = start_date_s.strftime("%a %b %d")
             if start_date_f == (date_formatted)
               print "            "
             else
-              date = DateTime.parse(current_w[i]["start_date"])
+              date = DateTime.parse(current_w[i]["start_date"]).to_date
               date_formatted = date.strftime("%a %b %d")
             print date_formatted
             print "  "
           end
           date_formatted = start_date_f
-
+          
           if current_w[i]["end_date"] == ""
             print "             "
           else
             time_s = DateTime.parse(current_w[i]["start_date"])
             time_s_formatted = time_s.strftime("%H:%M")
-
+            
             time_e = DateTime.parse(current_w[i]["end_date"])
             time_e_formatted = time_e.strftime("%H:%M")
-
+            
             print "#{time_s_formatted} - #{time_e_formatted}"
           end
           print " "
-          puts "#{current_w[i]["title"]} (#{current_w[i]["id"]})"
-        end
+          puts "#{current_w[i]["title"]} (#{current_w[i]["id"]})"          
+          end
         print_options
       end
 
